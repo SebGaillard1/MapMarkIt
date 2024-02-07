@@ -39,14 +39,12 @@ class MapsFragment : Fragment() {
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
             || ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             googleMap.isMyLocationEnabled = true
-        } else {
-            requestLocationPermission()
         }
     }
 
     private fun createLocationRequest() {
         locationRequest = LocationRequest.create().apply {
-            interval = 10000
+            interval = 2000
             fastestInterval = 1000
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
@@ -71,10 +69,6 @@ class MapsFragment : Fragment() {
             return
         }
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
-    }
-
-    private fun requestLocationPermission() {
-        ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -104,7 +98,6 @@ class MapsFragment : Fragment() {
                 }
                 startLocationUpdates()
             } else {
-                requestLocationPermission()
                 val predefinedLocation = LatLng(45.75, 4.85)
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(predefinedLocation, 10f))
             }
@@ -113,35 +106,8 @@ class MapsFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        fusedLocationClient.removeLocationUpdates(locationCallback)
-    }
-
-    companion object {
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            LOCATION_PERMISSION_REQUEST_CODE -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission accordée
-                    if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                        || ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                        googleMap.isMyLocationEnabled = true
-                        googleMap.uiSettings.isMyLocationButtonEnabled = true
-                        progressBar.visibility = View.VISIBLE
-                        locationStatusText.visibility = View.VISIBLE
-                        startLocationUpdates()
-                    }
-                } else {
-                    // Permission refusée
-                    progressBar.visibility = View.GONE
-                    locationStatusText.visibility = View.GONE
-                    val predefinedLocation = LatLng(45.75, 4.85)
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(predefinedLocation, 10f))
-                }
-            }
+        if (::locationCallback.isInitialized) {
+            fusedLocationClient.removeLocationUpdates(locationCallback)
         }
     }
 }

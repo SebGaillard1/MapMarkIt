@@ -47,6 +47,8 @@ class WelcomeActivity : AppCompatActivity() {
                 // Si permissions pas accordées
                 showDefaultLocationDialog()
             }
+            val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
+            prefs.edit().putBoolean("firstStart", false).apply()
         }
     }
 

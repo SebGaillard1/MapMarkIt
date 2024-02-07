@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity() {
         val firstStart = prefs.getBoolean("firstStart", true)
 
         if (firstStart) {
-            prefs.edit().putBoolean("firstStart", false).apply()
             startWelcomeActivityForResult.launch(Intent(this, WelcomeActivity::class.java))
         } else {
             setupMainActivity()

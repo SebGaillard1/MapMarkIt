@@ -97,8 +97,11 @@ class MapsFragment : Fragment() {
                 || ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 googleMap.isMyLocationEnabled = true
                 googleMap.uiSettings.isMyLocationButtonEnabled = true
-                progressBar.visibility = View.VISIBLE
-                locationStatusText.visibility = View.VISIBLE
+
+                if (isFirstLocationUpdate) {
+                    progressBar.visibility = View.VISIBLE
+                    locationStatusText.visibility = View.VISIBLE
+                }
                 startLocationUpdates()
             } else {
                 requestLocationPermission()

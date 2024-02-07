@@ -35,14 +35,18 @@
 
     <Button
         android:id="@+id/button_first"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_width="247dp"
+        android:layout_height="77dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/start"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
+        android:textColor="#2C74C5"
+        android:textSize="24sp"
+        android:background="@drawable/home_buttons"
+        app:backgroundTint="#E9F4FF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:elevation="0dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

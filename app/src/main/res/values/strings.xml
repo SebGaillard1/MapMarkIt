@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">MapMarkIt</string>
+    <string name="title_map">Carte</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_settings">Réglages</string>
+
+    <!-- Strings used for fragments for navigation -->
+    <string name="maps_fragment_label">Maps Fragment</string>
+    <string name="start">Commencer</string>
+    <string name="previous">Previous</string>
+
+    <string name="welcome_title">
+    <b>Bienvenue sur MapMarkIt, votre guide de navigation urbaine !</b>
+    </string>
+    <string name="welcome_details">
+    Découvrez les points d\'intérêts cachés de votre ville, localisez facilement <b>magasins, restaurants</b>, et bien plus encore, directement au creux de votre main.\n\n<b>MapMarkIt</b> est conçue pour vous accompagner dans toutes vos <b>aventures urbaines</b>, en mettant en lumière les meilleures adresses autour de vous.
+    </string>
+</resources>

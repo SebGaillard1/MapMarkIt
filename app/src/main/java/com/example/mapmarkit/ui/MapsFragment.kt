@@ -2,6 +2,7 @@ package com.example.mapmarkit.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Looper
@@ -101,8 +102,32 @@ class MapsFragment : Fragment() {
                 val predefinedLocation = LatLng(45.75, 4.85)
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(predefinedLocation, 10f))
             }
+
+            // 1. Écouter les clics sur les points d'intérêt
+            googleMap.setOnPoiClickListener { poi ->
+                // 2. Récupérer les informations du point d'intérêt
+                val poiName = poi.name
+                val poiLatLng = poi.latLng
+                val poiId = poi.placeId
+
+                // Afficher les informations du point d'intérêt dans un dialogue
+                showPoiInfoDialog(poiName, poiLatLng, poiId)
+            }
         }
     }
+
+    private fun showPoiInfoDialog(poiName: String, poiLatLng: LatLng, poiId: String) {
+        val snippet = "Position: ${poiLatLng.latitude}, ${poiLatLng.longitude}"
+
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle(poiName)
+            .setMessage(snippet)
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
+        builder.create().show()
+    }
+
 
     override fun onStop() {
         super.onStop()

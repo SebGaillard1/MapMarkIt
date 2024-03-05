@@ -9,6 +9,9 @@ data class PointOfInterest(
     @PrimaryKey(autoGenerate = false) val id: String,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "latitude") val latitude: String,
-    @ColumnInfo(name = "longitude") val longitude: String
-)
+    @ColumnInfo(name = "longitude") val longitude: String,
+    @ColumnInfo(name = "address") val address: String?,
+    @ColumnInfo(name = "rating") val rating: String?,
+    @ColumnInfo(name = "types") val types: String?,
+    )
 

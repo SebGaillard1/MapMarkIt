@@ -11,6 +11,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.room.Room
 import com.example.mapmarkit.databinding.ActivityMainBinding
+import com.google.android.libraries.places.api.Places
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,6 +32,9 @@ class MainActivity : AppCompatActivity() {
         } else {
             setupMainActivity()
         }
+
+        // Initialize the Places SDK
+        Places.initializeWithNewPlacesApiEnabled(applicationContext, "AIzaSyC8x6iTjvcg3Rgmj-UgdkZbrOD2FaVoV0o")
     }
 
     private fun setupMainActivity() {

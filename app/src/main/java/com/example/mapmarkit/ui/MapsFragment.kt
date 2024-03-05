@@ -13,13 +13,17 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.example.mapmarkit.AppDatabase
 import com.example.mapmarkit.R
+import com.example.mapmarkit.model.PointOfInterest
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import kotlinx.coroutines.launch
 
 class MapsFragment : Fragment() {
 
@@ -122,16 +126,40 @@ class MapsFragment : Fragment() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle(poiName)
             .setMessage(snippet)
-            .setPositiveButton("OK") { dialog, _ ->
+
+        lifecycleScope.launch {
+            val poiDao = AppDatabase.getDatabase(requireContext()).pointOfInterestDao()
+            val isFavorite = poiDao.isPoiFavorited(poiId)
+            if (isFavorite) {
+                // POI est déjà en favoris, affichez "Retirer des favoris"
+                builder.setNegativeButton("Retirer des favoris") { dialog, _ ->
+                    // Supprimez le POI de la base de données
+                    val poi = PointOfInterest(poiId, poiName, poiLatLng.latitude.toString(), poiLatLng.longitude.toString())
+                    lifecycleScope.launch {
+                        poiDao.delete(poi)
+                    }
+                    dialog.dismiss()
+                }
+            } else {
+                // POI n'est pas en favoris, affichez "Ajouter aux favoris"
+                builder.setNegativeButton("Ajouter aux favoris") { dialog, _ ->
+                    // Ajoutez le POI à la base de données
+                    val poi = PointOfInterest(poiId, poiName, poiLatLng.latitude.toString(), poiLatLng.longitude.toString())
+                    lifecycleScope.launch {
+                        poiDao.insert(poi)
+                    }
+                    dialog.dismiss()
+                }
+            }
+
+            builder.setPositiveButton("OK") { dialog, _ ->
                 dialog.dismiss()
             }
-            // Ajouter un bouton "Ajouter aux favoris"
-            .setNegativeButton("Ajouter aux favoris") { dialog, _ ->
-                // TODO: Ajoutez le code pour ajouter le point d'intérêt aux favoris ici
-                dialog.dismiss()
-            }
-        builder.create().show()
+
+            builder.create().show()
+        }
     }
+
 
 
 

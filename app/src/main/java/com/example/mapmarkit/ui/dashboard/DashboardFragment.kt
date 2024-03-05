@@ -17,12 +17,10 @@ class DashboardFragment : Fragment() {
 
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
-    private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PoiAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         val dashboardViewModel =
@@ -31,20 +29,16 @@ class DashboardFragment : Fragment() {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        // 1. Configurez le RecyclerView
-        recyclerView = binding.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        // Configurez le RecyclerView
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = PoiAdapter(emptyList()).also { this@DashboardFragment.adapter = it }
+        }
 
-        // 2. Créez votre liste de points d'intérêt (factice pour cet exemple)
-        val poiList = listOf(
-            PointOfInterest("1", "Point of Interest 1", "40.7128", "-74.0060"),
-            PointOfInterest("2", "Point of Interest 2", "34.0522", "-118.2437"),
-            PointOfInterest("3", "Point of Interest 3", "51.5074", "-0.1278")
-        )
-
-        // 3. Créez et définissez l'adaptateur
-        adapter = PoiAdapter(poiList)
-        recyclerView.adapter = adapter
+        // Observez les données des POIs et mettez à jour l'UI
+        dashboardViewModel.allPointsOfInterest.observe(viewLifecycleOwner) { pois ->
+            adapter.updateData(pois)
+        }
 
         return root
     }

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mapmarkit.R
 import com.example.mapmarkit.model.PointOfInterest
 
-class PoiAdapter(private val poiList: List<PointOfInterest>) : RecyclerView.Adapter<PoiViewHolder>() {
+class PoiAdapter(private var poiList: List<PointOfInterest>) : RecyclerView.Adapter<PoiViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PoiViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.poi_item_layout, parent, false)
@@ -21,6 +21,12 @@ class PoiAdapter(private val poiList: List<PointOfInterest>) : RecyclerView.Adap
         holder.poiLongTextView.text = "Longitude: ${poi.longitude}"
         holder.poiIdTextView.text = "ID: ${poi.id}"
     }
+
+    fun updateData(newData: List<PointOfInterest>) {
+        poiList = newData
+        notifyDataSetChanged()
+    }
+
 
     override fun getItemCount(): Int {
         return poiList.size

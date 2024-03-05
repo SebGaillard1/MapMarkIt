@@ -1,9 +1,12 @@
 package com.example.mapmarkit.model
 
+import androidx.room.ColumnInfo
+import androidx.room.PrimaryKey
+
 data class PointOfInterest(
-    val id: String,
-    val name: String,
-    val latitude: String,
-    val longitude: String
+    @PrimaryKey val id: String,
+    @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "latitude") val latitude: String,
+    @ColumnInfo(name = "longitude") val longitude: String
 )
 

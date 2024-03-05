@@ -117,7 +117,7 @@ class MapsFragment : Fragment() {
     }
 
     private fun showPoiInfoDialog(poiName: String, poiLatLng: LatLng, poiId: String) {
-        val snippet = "Position: ${poiLatLng.latitude}, ${poiLatLng.longitude}"
+        val snippet = "Position: ${poiLatLng.latitude}, ${poiLatLng.longitude} $poiId"
 
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle(poiName)
@@ -125,8 +125,14 @@ class MapsFragment : Fragment() {
             .setPositiveButton("OK") { dialog, _ ->
                 dialog.dismiss()
             }
+            // Ajouter un bouton "Ajouter aux favoris"
+            .setNegativeButton("Ajouter aux favoris") { dialog, _ ->
+                // TODO: Ajoutez le code pour ajouter le point d'intérêt aux favoris ici
+                dialog.dismiss()
+            }
         builder.create().show()
     }
+
 
 
     override fun onStop() {

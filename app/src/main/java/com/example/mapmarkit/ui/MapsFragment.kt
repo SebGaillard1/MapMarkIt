@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Looper
 import android.view.LayoutInflater
@@ -126,12 +127,15 @@ class MapsFragment : Fragment() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle(poiName)
             .setMessage(snippet)
+            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
 
         lifecycleScope.launch {
             val poiDao = AppDatabase.getDatabase(requireContext()).pointOfInterestDao()
-            val isFavorite = poiDao.isPoiFavorited(poiId)
+            val isFavorite = poiDao.isPoiFavorited(poiId) // Assurez-vous que cette fonction existe et renvoie un Boolean
+
+            // Configurez le dialogue en fonction de si le POI est un favori ou non
             if (isFavorite) {
-                // POI est déjà en favoris, affichez "Retirer des favoris"
+                // POI est déjà en favoris
                 builder.setNegativeButton("Retirer des favoris") { dialog, _ ->
                     // Supprimez le POI de la base de données
                     val poi = PointOfInterest(poiId, poiName, poiLatLng.latitude.toString(), poiLatLng.longitude.toString())
@@ -141,7 +145,7 @@ class MapsFragment : Fragment() {
                     dialog.dismiss()
                 }
             } else {
-                // POI n'est pas en favoris, affichez "Ajouter aux favoris"
+                // POI n'est pas en favoris
                 builder.setNegativeButton("Ajouter aux favoris") { dialog, _ ->
                     // Ajoutez le POI à la base de données
                     val poi = PointOfInterest(poiId, poiName, poiLatLng.latitude.toString(), poiLatLng.longitude.toString())
@@ -152,13 +156,17 @@ class MapsFragment : Fragment() {
                 }
             }
 
-            builder.setPositiveButton("OK") { dialog, _ ->
-                dialog.dismiss()
-            }
+            // Affichez le dialogue
+            val dialog = builder.create()
+            dialog.show()
 
-            builder.create().show()
+            // Si le POI est un favori, changez la couleur du bouton en rouge
+            if (isFavorite) {
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
+            }
         }
     }
+
 
 
 

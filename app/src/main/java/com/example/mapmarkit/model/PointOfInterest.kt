@@ -15,7 +15,6 @@ data class PointOfInterest(
     @ColumnInfo(name = "rating") val rating: String? = null,
     @ColumnInfo(name = "types") val types: String? = null,
     @ColumnInfo(name = "photo_reference") val photoReference: String? = null,
-    @ColumnInfo(name = "business_status") val businessStatus: String? = null,
     @ColumnInfo(name = "website") val website: String? = null,
     @ColumnInfo(name = "summary") val summary: String? = null,
     )

@@ -56,7 +56,6 @@ class DashboardFragment : Fragment() {
                 putString("poiName", poi.name)
                 putString("poiType", poi.types)
                 putString("poiRating", "⭐️ ${poi.rating} /5")
-                putString("poiStatus", poi.businessStatus)
                 putString("poiDetails", poi.summary)
                 putString("poiAddress", "📍  ${poi.address}")
                 putString("poiPhone", "📞  ${poi.phone}")

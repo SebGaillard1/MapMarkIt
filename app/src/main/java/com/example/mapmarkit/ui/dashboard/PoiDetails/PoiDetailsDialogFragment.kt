@@ -44,7 +44,6 @@ class PoiDetailsDialogFragment : DialogFragment() {
         view.findViewById<TextView>(R.id.tvPoiName).text = arguments?.getString("poiName")
         view.findViewById<TextView>(R.id.tvPoiType).text = arguments?.getString("poiType")
         view.findViewById<TextView>(R.id.tvPoiRating).text = arguments?.getString("poiRating")
-        view.findViewById<TextView>(R.id.tvPoiStatus).text = arguments?.getString("poiStatus")
         view.findViewById<TextView>(R.id.tvPoiDetails).text = arguments?.getString("poiDetails")
         view.findViewById<TextView>(R.id.tvPoiAddress).text = arguments?.getString("poiAddress")
         view.findViewById<TextView>(R.id.tvPoiPhone).text = arguments?.getString("poiPhone")

@@ -19,7 +19,7 @@
             android:textSize="28sp"
             android:textColor="#000000"
             android:textStyle="bold"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="2dp"/>
 
         <TextView
             android:id="@+id/tvPoiType"
@@ -28,6 +28,14 @@
             android:text="Restaurant italien"
             android:textSize="18sp"
             android:textColor="#666666"
+            android:layout_marginBottom="12dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Avis"
+            android:textSize="20sp"
+            android:textStyle="bold"
             android:layout_marginBottom="2dp"/>
 
         <TextView
@@ -36,15 +44,8 @@
             android:layout_height="wrap_content"
             android:text="⭐ 4.7"
             android:textSize="18sp"
-            android:layout_marginBottom="2dp"/>
-
-        <TextView
-            android:id="@+id/tvPoiStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ouvert"
-            android:textSize="18sp"
             android:layout_marginBottom="16dp"/>
+
 
         <ImageView
             android:id="@+id/ivPoiImage"

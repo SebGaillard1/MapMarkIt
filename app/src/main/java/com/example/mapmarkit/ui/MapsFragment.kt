@@ -230,7 +230,6 @@ class MapsFragment : Fragment() {
                 phone = place.phoneNumber?.toString(),
                 types = place.placeTypes.firstOrNull(),
                 photoReference = photoReference,
-                businessStatus = place.businessStatus.toString(),
                 summary = summary,
                 website = place.websiteUri.toString()
             )

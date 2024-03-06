@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">MapMarkIt</string>
     <string name="title_map">Carte</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_dashboard">Favoris</string>
     <string name="title_settings">Réglages</string>
 
     <!-- Strings used for fragments for navigation -->

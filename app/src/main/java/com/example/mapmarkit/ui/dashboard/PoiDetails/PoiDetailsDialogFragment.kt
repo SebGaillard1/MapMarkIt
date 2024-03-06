@@ -48,7 +48,6 @@ class PoiDetailsDialogFragment : DialogFragment() {
         val imageUrl = arguments?.getString("poiImageUrl")
         val photoUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${imageUrl}&key=AIzaSyC8x6iTjvcg3Rgmj-UgdkZbrOD2FaVoV0o"
 
-
         imageUrl?.let {
             Glide.with(this)
                 .load(photoUrl)

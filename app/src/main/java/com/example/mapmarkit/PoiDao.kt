@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.mapmarkit.model.PointOfInterest
 
@@ -17,6 +18,9 @@ interface PoiDao {
 
     @Insert
     suspend fun insert(pointOfInterest: PointOfInterest)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertOrReplacePoi(pointOfInterest: PointOfInterest)
 
     @Delete
     suspend fun delete(pointOfInterest: PointOfInterest)

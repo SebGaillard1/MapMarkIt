@@ -10,8 +10,10 @@ data class PointOfInterest(
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "latitude") val latitude: String,
     @ColumnInfo(name = "longitude") val longitude: String,
-    @ColumnInfo(name = "address") val address: String?,
-    @ColumnInfo(name = "rating") val rating: String?,
-    @ColumnInfo(name = "types") val types: String?,
+    @ColumnInfo(name = "address") val address: String? = null,
+    @ColumnInfo(name = "phone") val phone: String? = null,
+    @ColumnInfo(name = "rating") val rating: String? = null,
+    @ColumnInfo(name = "types") val types: String? = null,
+    @ColumnInfo(name = "photo_reference") val photoReference: String? = null,
     )
 

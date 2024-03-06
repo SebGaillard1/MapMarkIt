@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,12 +19,17 @@ import androidx.lifecycle.lifecycleScope
 import com.example.mapmarkit.AppDatabase
 import com.example.mapmarkit.R
 import com.example.mapmarkit.model.PointOfInterest
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
+import com.google.android.libraries.places.api.net.PlacesClient
 import kotlinx.coroutines.launch
 
 class MapsFragment : Fragment() {
@@ -37,6 +43,8 @@ class MapsFragment : Fragment() {
     private var isFirstLocationUpdate = true
     private lateinit var locationStatusText: TextView
 
+    private lateinit var placesClient: PlacesClient
+
     @SuppressLint("MissingPermission")
     private val callback = OnMapReadyCallback { map ->
         googleMap = map
@@ -46,6 +54,16 @@ class MapsFragment : Fragment() {
             || ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             googleMap.isMyLocationEnabled = true
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Initialisez l'API Google Places
+        if (!Places.isInitialized()) {
+            Places.initialize(requireContext(), "AIzaSyC8x6iTjvcg3Rgmj-UgdkZbrOD2FaVoV0o")
+        }
+        placesClient = Places.createClient(requireContext())
     }
 
     private fun createLocationRequest() {
@@ -151,6 +169,7 @@ class MapsFragment : Fragment() {
                     val poi = PointOfInterest(poiId, poiName, poiLatLng.latitude.toString(), poiLatLng.longitude.toString())
                     lifecycleScope.launch {
                         poiDao.insert(poi)
+                        getPlaceInformation(poi)
                     }
                     dialog.dismiss()
                 }
@@ -167,9 +186,47 @@ class MapsFragment : Fragment() {
         }
     }
 
+    private fun getPlaceInformation(poi: PointOfInterest) {
+        val poiDao = AppDatabase.getDatabase(requireContext()).pointOfInterestDao()
+        val placeFields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.RATING, Place.Field.TYPES, Place.Field.PHONE_NUMBER, Place.Field.PHOTO_METADATAS)
+        val request = FetchPlaceRequest.newInstance(poi.id, placeFields)
 
+        placesClient.fetchPlace(request).addOnSuccessListener { response ->
+            val place = response.place
+            // Créez une nouvelle instance de PointOfInterest avec les informations récupérées
+            val responseString = place.photoMetadatas.firstOrNull().toString()
 
+            val photoReferencePrefix = "photoReference="
+            val startIndex = responseString.indexOf(photoReferencePrefix) + photoReferencePrefix.length
+            val endIndex = responseString.indexOf(",", startIndex) // Supposant que la chaîne se termine par une virgule après le photoReference
 
+            val photoReference = if (startIndex > photoReferencePrefix.length && endIndex > startIndex) {
+                responseString.substring(startIndex, endIndex)
+            } else {
+                ""
+            }
+
+            val poi = PointOfInterest(
+                id = poi.id,
+                name = place.name ?: poi.name,
+                latitude = poi.latitude,
+                longitude = poi.longitude,
+                address = place.address,
+                rating = place.rating?.toString(),
+                phone = place.phoneNumber?.toString(),
+                types = place.placeTypes.firstOrNull(),
+                photoReference = photoReference
+            )
+            // Enregistrez l'instance dans la base de données
+            lifecycleScope.launch {
+                poiDao.insertOrReplacePoi(poi)
+            }
+        }.addOnFailureListener { exception ->
+            if (exception is ApiException) {
+                Log.e("PlacesError", "Place not found: ${exception.statusCode}")
+            }
+        }
+    }
 
     override fun onStop() {
         super.onStop()

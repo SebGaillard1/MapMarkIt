@@ -28,16 +28,12 @@ class DashboardFragment : Fragment() {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        // Configurez le RecyclerView
         binding.recyclerView.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = PoiAdapter(emptyList()) { poi ->
-                // Ici, vous gérez le clic sur un élément
-                // Par exemple, ouvrir une modale avec les détails du POI sélectionné
                 showPoiDetailsDialog(poi)
             }.also { this@DashboardFragment.adapter = it }        }
 
-        // Observez les données des POIs et mettez à jour l'UI
         dashboardViewModel.allPointsOfInterest.observe(viewLifecycleOwner) { pois ->
             adapter.updateData(pois)
         }

@@ -60,7 +60,6 @@ class MapsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Initialisez l'API Google Places
         if (!Places.isInitialized()) {
             Places.initialize(requireContext(), "AIzaSyC8x6iTjvcg3Rgmj-UgdkZbrOD2FaVoV0o")
         }
@@ -127,36 +126,30 @@ class MapsFragment : Fragment() {
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(predefinedLocation, 10f))
             }
 
-            // 1. Écouter les clics sur les points d'intérêt
             googleMap.setOnPoiClickListener { poi ->
-                // 2. Récupérer les informations du point d'intérêt
                 val poiName = poi.name
                 val poiLatLng = poi.latLng
                 val poiId = poi.placeId
 
-                // Afficher les informations du point d'intérêt dans un dialogue
                 showPoiInfoDialog(poiName, poiLatLng, poiId)
             }
         }
     }
 
     private fun showPoiInfoDialog(poiName: String, poiLatLng: LatLng, poiId: String) {
-        val snippet = "Position: ${poiLatLng.latitude}, ${poiLatLng.longitude} $poiId"
+        val snippet = "Ajoutez le lieu au favoris pour le retrouver facilement !"
 
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle(poiName)
             .setMessage(snippet)
-            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+            .setPositiveButton("Fermer") { dialog, _ -> dialog.dismiss() }
 
         lifecycleScope.launch {
             val poiDao = AppDatabase.getDatabase(requireContext()).pointOfInterestDao()
             val isFavorite = poiDao.isPoiFavorited(poiId) // Assurez-vous que cette fonction existe et renvoie un Boolean
 
-            // Configurez le dialogue en fonction de si le POI est un favori ou non
             if (isFavorite) {
-                // POI est déjà en favoris
                 builder.setNegativeButton("Retirer des favoris") { dialog, _ ->
-                    // Supprimez le POI de la base de données
                     val poi = PointOfInterest(poiId, poiName, poiLatLng.latitude.toString(), poiLatLng.longitude.toString())
                     lifecycleScope.launch {
                         poiDao.delete(poi)
@@ -165,9 +158,7 @@ class MapsFragment : Fragment() {
                     }
                 }
             } else {
-                // POI n'est pas en favoris
                 builder.setNegativeButton("Ajouter aux favoris") { dialog, _ ->
-                    // Ajoutez le POI à la base de données
                     val poi = PointOfInterest(poiId, poiName, poiLatLng.latitude.toString(), poiLatLng.longitude.toString())
                     lifecycleScope.launch {
                         poiDao.insert(poi)
@@ -178,13 +169,13 @@ class MapsFragment : Fragment() {
                 }
             }
 
-            // Affichez le dialogue
             val dialog = builder.create()
             dialog.show()
 
-            // Si le POI est un favori, changez la couleur du bouton en rouge
             if (isFavorite) {
                 dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
+            } else {
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.rgb(20, 155, 58))
             }
         }
     }
@@ -205,7 +196,6 @@ class MapsFragment : Fragment() {
 
         placesClient.fetchPlace(request).addOnSuccessListener { response ->
             val place = response.place
-            // Créez une nouvelle instance de PointOfInterest avec les informations récupérées
             val responseString = place.photoMetadatas.firstOrNull().toString()
 
             val photoReferencePrefix = "photoReference="
@@ -233,7 +223,7 @@ class MapsFragment : Fragment() {
                 summary = summary,
                 website = place.websiteUri.toString()
             )
-            // Enregistrez l'instance dans la base de données
+
             lifecycleScope.launch {
                 poiDao.insertOrReplacePoi(poi)
             }

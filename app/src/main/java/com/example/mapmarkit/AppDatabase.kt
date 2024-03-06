@@ -15,19 +15,14 @@ abstract class AppDatabase : RoomDatabase() {
         private var INSTANCE: AppDatabase? = null
 
         fun getDatabase(context: Context): AppDatabase {
-            // Si l'instance n'est pas null, la retourner
             return INSTANCE ?: synchronized(this) {
-                // Sinon, créer l'instance
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
                     "point_of_interest_database"
                 )
-                    // MigrationStrategy ici si nécessaire
-                    //.fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
-                // Retourner l'instance créée
                 instance
             }
         }

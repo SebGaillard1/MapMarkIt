@@ -16,16 +16,6 @@ import com.example.mapmarkit.AppDatabase
 import com.example.mapmarkit.R
 import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [PoiDetailsDialogFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class PoiDetailsDialogFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,10 +27,8 @@ class PoiDetailsDialogFragment : DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_poi_details_dialog, container, false)
 
-        // Utilisez la vue gonflée pour trouver les TextViews et configurer leurs textes
         view.findViewById<TextView>(R.id.tvPoiName).text = arguments?.getString("poiName")
         view.findViewById<TextView>(R.id.tvPoiType).text = arguments?.getString("poiType")
         view.findViewById<TextView>(R.id.tvPoiRating).text = arguments?.getString("poiRating")
@@ -65,11 +53,9 @@ class PoiDetailsDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Trouvez le LinearLayout par son ID
         val linearLayout = view.findViewById<LinearLayout>(R.id.delete_button)
         val poiDao = AppDatabase.getDatabase(requireContext()).pointOfInterestDao()
 
-        // Définissez un OnClickListener sur le LinearLayout
         linearLayout.setOnClickListener {
             lifecycleScope.launch {
                 arguments?.getString("poiId")?.let { poiId ->
@@ -82,5 +68,4 @@ class PoiDetailsDialogFragment : DialogFragment() {
             }
         }
     }
-
 }

@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
             setupMainActivity()
         }
 
-        // Initialize the Places SDK
         Places.initializeWithNewPlacesApiEnabled(applicationContext, "AIzaSyC8x6iTjvcg3Rgmj-UgdkZbrOD2FaVoV0o")
     }
 

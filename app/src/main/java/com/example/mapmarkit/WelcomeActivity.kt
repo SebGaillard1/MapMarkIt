@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Button
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -16,10 +17,11 @@ class WelcomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
 
-        val buttonStart: Button = findViewById(R.id.button_first)
-        buttonStart.setOnClickListener {
+        val linearLayout: LinearLayout = findViewById(R.id.welcome_button)
+        linearLayout.setOnClickListener {
             requestLocationPermission()
         }
+
     }
 
     private fun requestLocationPermission() {
@@ -32,7 +34,6 @@ class WelcomeActivity : AppCompatActivity() {
                 LOCATION_PERMISSION_REQUEST_CODE
             )
         } else {
-            // Permissions déjà accordées
             finish()
         }
     }
@@ -41,10 +42,8 @@ class WelcomeActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
-                // Toutes les permissions ont été accordées
                 finish()
             } else {
-                // Si permissions pas accordées
                 showDefaultLocationDialog()
             }
             val prefs = getSharedPreferences("prefs", MODE_PRIVATE)

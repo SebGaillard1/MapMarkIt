@@ -24,4 +24,7 @@ interface PoiDao {
 
     @Delete
     suspend fun delete(pointOfInterest: PointOfInterest)
+
+    @Query("DELETE FROM point_of_interest WHERE id = :id")
+    suspend fun deleteById(id: String)
 }

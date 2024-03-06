@@ -55,14 +55,14 @@ class DashboardFragment : Fragment() {
             arguments = Bundle().apply {
                 putString("poiName", poi.name)
                 putString("poiType", poi.types)
-                putString("poiRating", "⭐️ ${poi.rating}")
+                putString("poiRating", "⭐️ ${poi.rating} /5")
                 putString("poiStatus", poi.businessStatus)
                 putString("poiDetails", poi.summary)
                 putString("poiAddress", "📍  ${poi.address}")
-                putString("poiPhone", "📞 ${poi.phone}")
-                putString("poiWebsite", "🌐 ${poi.website}")
-                // Si vous avez une URL pour l'image, vous pouvez également la passer comme ceci:
+                putString("poiPhone", "📞  ${poi.phone}")
+                putString("poiWebsite", "🌐  ${poi.website}")
                 putString("poiImageUrl", poi.photoReference)
+                putString("poiId", poi.id)
             }
         }
         dialogFragment.show(childFragmentManager, "PoiDetailsDialog")

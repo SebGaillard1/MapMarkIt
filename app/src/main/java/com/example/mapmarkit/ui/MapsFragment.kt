@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -159,8 +160,9 @@ class MapsFragment : Fragment() {
                     val poi = PointOfInterest(poiId, poiName, poiLatLng.latitude.toString(), poiLatLng.longitude.toString())
                     lifecycleScope.launch {
                         poiDao.delete(poi)
+                        dialog.dismiss()
+                        Toast.makeText(context, "Favoris supprimé !", Toast.LENGTH_SHORT).show()
                     }
-                    dialog.dismiss()
                 }
             } else {
                 // POI n'est pas en favoris
@@ -170,8 +172,9 @@ class MapsFragment : Fragment() {
                     lifecycleScope.launch {
                         poiDao.insert(poi)
                         getPlaceInformation(poi)
+                        dialog.dismiss()
+                        Toast.makeText(context, "Favoris ajouté !", Toast.LENGTH_SHORT).show()
                     }
-                    dialog.dismiss()
                 }
             }
 
@@ -215,6 +218,8 @@ class MapsFragment : Fragment() {
                 ""
             }
 
+            val summary = if (place.editorialSummary.isNullOrEmpty()) "Pas de détails disponible." else place.editorialSummary
+
             val poi = PointOfInterest(
                 id = poi.id,
                 name = place.name ?: poi.name,
@@ -226,7 +231,7 @@ class MapsFragment : Fragment() {
                 types = place.placeTypes.firstOrNull(),
                 photoReference = photoReference,
                 businessStatus = place.businessStatus.toString(),
-                summary = place.editorialSummary,
+                summary = summary,
                 website = place.websiteUri.toString()
             )
             // Enregistrez l'instance dans la base de données

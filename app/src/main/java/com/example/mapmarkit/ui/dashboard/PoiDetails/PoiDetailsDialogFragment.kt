@@ -6,10 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.example.mapmarkit.AppDatabase
 import com.example.mapmarkit.R
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -57,4 +62,26 @@ class PoiDetailsDialogFragment : DialogFragment() {
 
         return view
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Trouvez le LinearLayout par son ID
+        val linearLayout = view.findViewById<LinearLayout>(R.id.delete_button)
+        val poiDao = AppDatabase.getDatabase(requireContext()).pointOfInterestDao()
+
+        // Définissez un OnClickListener sur le LinearLayout
+        linearLayout.setOnClickListener {
+            lifecycleScope.launch {
+                arguments?.getString("poiId")?.let { poiId ->
+                    if (poiId.isNotEmpty()) {
+                        poiDao.deleteById(poiId)
+                        dialog?.dismiss()
+                        Toast.makeText(context, "Favoris supprimé !", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+    }
+
 }

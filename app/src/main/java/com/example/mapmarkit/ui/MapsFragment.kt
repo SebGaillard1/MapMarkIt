@@ -188,7 +188,16 @@ class MapsFragment : Fragment() {
 
     private fun getPlaceInformation(poi: PointOfInterest) {
         val poiDao = AppDatabase.getDatabase(requireContext()).pointOfInterestDao()
-        val placeFields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.RATING, Place.Field.TYPES, Place.Field.PHONE_NUMBER, Place.Field.PHOTO_METADATAS)
+        val placeFields = listOf(Place.Field.ID,
+            Place.Field.NAME,
+            Place.Field.ADDRESS,
+            Place.Field.RATING,
+            Place.Field.TYPES,
+            Place.Field.PHONE_NUMBER,
+            Place.Field.PHOTO_METADATAS,
+            Place.Field.BUSINESS_STATUS,
+            Place.Field.WEBSITE_URI,
+            Place.Field.EDITORIAL_SUMMARY)
         val request = FetchPlaceRequest.newInstance(poi.id, placeFields)
 
         placesClient.fetchPlace(request).addOnSuccessListener { response ->
@@ -215,7 +224,10 @@ class MapsFragment : Fragment() {
                 rating = place.rating?.toString(),
                 phone = place.phoneNumber?.toString(),
                 types = place.placeTypes.firstOrNull(),
-                photoReference = photoReference
+                photoReference = photoReference,
+                businessStatus = place.businessStatus.toString(),
+                summary = place.editorialSummary,
+                website = place.websiteUri.toString()
             )
             // Enregistrez l'instance dans la base de données
             lifecycleScope.launch {

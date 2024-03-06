@@ -54,13 +54,13 @@ class DashboardFragment : Fragment() {
         val dialogFragment = PoiDetailsDialogFragment().apply {
             arguments = Bundle().apply {
                 putString("poiName", poi.name)
-                putString("poiType", poi.types) // Assurez-vous que ces noms correspondent aux clés utilisées dans votre DialogFragment
-                putString("poiRating", poi.rating)
-                //putString("poiStatus", poi.openNow.toString()) // Convertir Boolean en String, ou adapter selon vos données
-                //putString("poiDetails", poi.details)
-                putString("poiAddress", poi.address)
-                putString("poiPhone", poi.phone)
-                //putString("poiWebsite", poi.website)
+                putString("poiType", poi.types)
+                putString("poiRating", "⭐️ ${poi.rating}")
+                putString("poiStatus", poi.businessStatus)
+                putString("poiDetails", poi.summary)
+                putString("poiAddress", "📍  ${poi.address}")
+                putString("poiPhone", "📞 ${poi.phone}")
+                putString("poiWebsite", "🌐 ${poi.website}")
                 // Si vous avez une URL pour l'image, vous pouvez également la passer comme ceci:
                 putString("poiImageUrl", poi.photoReference)
             }

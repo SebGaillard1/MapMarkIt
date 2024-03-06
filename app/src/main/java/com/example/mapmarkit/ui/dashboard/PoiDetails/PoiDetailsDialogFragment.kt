@@ -5,8 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
+import com.bumptech.glide.Glide
 import com.example.mapmarkit.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -43,11 +45,17 @@ class PoiDetailsDialogFragment : DialogFragment() {
         view.findViewById<TextView>(R.id.tvPoiPhone).text = arguments?.getString("poiPhone")
         view.findViewById<TextView>(R.id.tvPoiWebsite).text = arguments?.getString("poiWebsite")
 
-        // Ici, vous pouvez également charger l'image si vous avez une URL ou une référence en arguments
-        // Par exemple, avec Glide:
-        // Glide.with(this).load(arguments?.getString("poiImageUrl")).into(view.findViewById<ImageView>(R.id.ivPoiImage))
+        val imageUrl = arguments?.getString("poiImageUrl")
+        val photoUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${imageUrl}&key=AIzaSyC8x6iTjvcg3Rgmj-UgdkZbrOD2FaVoV0o"
 
-        // Retournez la vue gonflée
+
+        imageUrl?.let {
+            Glide.with(this)
+                .load(photoUrl)
+                .placeholder(android.R.drawable.ic_menu_gallery)
+                .into(view.findViewById(R.id.ivPoiImage))
+        }
+
         return view
     }
 }

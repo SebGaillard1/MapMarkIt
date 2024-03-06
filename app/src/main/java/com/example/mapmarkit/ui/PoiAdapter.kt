@@ -7,7 +7,8 @@ import com.bumptech.glide.Glide
 import com.example.mapmarkit.R
 import com.example.mapmarkit.model.PointOfInterest
 
-class PoiAdapter(private var poiList: List<PointOfInterest>) : RecyclerView.Adapter<PoiViewHolder>() {
+class PoiAdapter(private var poiList: List<PointOfInterest>,
+                 private val onItemClick: (PointOfInterest) -> Unit) : RecyclerView.Adapter<PoiViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PoiViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.poi_item_layout, parent, false)
@@ -27,6 +28,10 @@ class PoiAdapter(private var poiList: List<PointOfInterest>) : RecyclerView.Adap
         holder.poiAddressTextView.text = "📍${poi.address}"
         holder.poiRatingTextView.text = "⭐ ${poi.rating}"
         holder.poiPhoneTextView.text = "📞 ${poi.phone}"
+
+        holder.itemView.setOnClickListener {
+            onItemClick(poi)
+        }
     }
 
     fun updateData(newData: List<PointOfInterest>) {

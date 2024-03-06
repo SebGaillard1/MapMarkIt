@@ -16,4 +16,6 @@
     Découvrez les points d\'intérêts cachés de votre ville, localisez facilement <b>magasins, restaurants</b>, et bien plus encore, directement au creux de votre main.\n\n<b>MapMarkIt</b> est conçue pour vous accompagner dans toutes vos <b>aventures urbaines</b>, en mettant en lumière les meilleures adresses autour de vous.
     </string>
     <string name="poi_image">test</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
